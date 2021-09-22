@@ -21,11 +21,15 @@ public class RandomFieldFiller<T>
         {
             for (int j = 0; j < _field.Width; j++)
             {
-                if (_field.IsCellEmpty(i, j))
-                {
-                    _field[i, j] = _possibleElements[_rnd.Next(0, _possibleElements.Count)];
-                }
+                FillCellIfEmpty(i, j);
             }
+        }
+    }
+    private void FillCellIfEmpty(int height, int width)
+    {
+        if (_field.IsCellEmpty(height, width))
+        {
+            _field[height, width] = _possibleElements[_rnd.Next(0, _possibleElements.Count)];
         }
     }
 }

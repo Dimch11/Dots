@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 public abstract class Field<T>
 {
@@ -34,6 +35,13 @@ public abstract class Field<T>
             {
                 ClearCell(i, j);
             }
+        }
+    }
+    public void ClearCells(List<(int height, int width)> cells)
+    {
+        foreach (var cell in cells)
+        {
+            ClearCell(cell.height, cell.width);
         }
     }
     public abstract void ClearCell(int heightPos, int widthPos);

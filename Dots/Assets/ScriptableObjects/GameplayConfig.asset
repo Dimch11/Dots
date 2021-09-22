@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: GameplayConfig
   m_EditorClassIdentifier: 
   possibleDots:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  fieldHeight: 0
-  fieldWidth: 0
+  - {fileID: 11400000, guid: 2a92dd964bebd6f43a6bc978b6838f1b, type: 2}
+  - {fileID: 11400000, guid: 02bd2923e08f65046bdda86181a48dc2, type: 2}
+  - {fileID: 11400000, guid: 1189c533c9a692748a6fa390248eab4b, type: 2}
+  fieldHeight: 6
+  fieldWidth: 6

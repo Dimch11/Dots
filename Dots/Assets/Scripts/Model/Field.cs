@@ -7,11 +7,11 @@ public abstract class Field<T>
     {
         get
         {
-            return TryGetCell(heightPos, widthPos);
+            return cells[heightPos, widthPos];
         }
         set
         {
-            TrySetCell(heightPos, widthPos, value);
+            cells[heightPos, widthPos] = value;
         }
     }
 
@@ -23,8 +23,6 @@ public abstract class Field<T>
     public Field(int height, int width)
     {
         cells = new T[height, width];
-
-        Clear();
     }
 
     public void Clear()
@@ -44,36 +42,6 @@ public abstract class Field<T>
             ClearCell(cell.height, cell.width);
         }
     }
-    public abstract void ClearCell(int heightPos, int widthPos);
-    public abstract bool IsCellEmpty(int heightPos, int widthPos);
-
-    protected T TryGetCell(int heightPos, int widthPos)
-    {
-        if (CellExists(heightPos, widthPos))
-        {
-            return cells[heightPos, widthPos];
-        }
-        else
-        {
-            throw new ArgumentException();
-        }
-    }
-    protected void TrySetCell(int heightPos, int widthPos, T cellContent)
-    {
-        if (CellExists(heightPos, widthPos))
-        {
-            cells[heightPos, widthPos] = cellContent;
-        }
-        else
-        {
-            throw new ArgumentException();
-        }
-    }
-    protected bool CellExists(int heightPos, int widthPos)
-    {
-        bool heightIsOk = heightPos >= 0 && heightPos < cells.GetLength(0);
-        bool widthIsOk = widthPos >= 0 && widthPos < cells.GetLength(1);
-
-        return heightIsOk && widthIsOk;
-    }
+    public abstract void ClearCell(int height, int width);
+    public abstract bool CellIsEmpty(int height, int width);
 }

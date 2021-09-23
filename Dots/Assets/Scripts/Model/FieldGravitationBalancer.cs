@@ -46,7 +46,7 @@ public class FieldGravitationBalancer<T>
     {
         for (int i = _field.Height - 1; i > _curRow; i--)
         {
-            if (_field.IsCellEmpty(i, _curColumn))
+            if (_field.CellIsEmpty(i, _curColumn))
             {
                 return i;
             }

@@ -1,18 +1,20 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
 public class DotField : Field<Dot>
 {
-    private const int heightMultiplier = 2;
-
-    public DotField(int height, int width) : base(height * heightMultiplier, width)
+    public DotField(int height, int width) : base(height, width)
     {
-        
+
     }
 
-    public override void ClearCell(int heightPos, int widthPos)
+    public override bool CellIsEmpty(int height, int width)
     {
-        cells[heightPos, widthPos] = null;
+        return cells[height, width].GetComponent<Dot>().dotConfig == null;
     }
-    public override bool IsCellEmpty(int heightPos, int widthPos)
+    public override void ClearCell(int height, int width)
     {
-        return cells[heightPos, widthPos] == null;
+        cells[height, width] = null;
     }
 }

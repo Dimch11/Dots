@@ -1,7 +1,15 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Dot", menuName = "ScriptableObjects/Dot", order = 2)]
-public class Dot : ScriptableObject
+public class Dot : MonoBehaviour
 {
-    public Sprite sprite;
+    public DotConfig dotConfig;
+    public SpriteRenderer _dotImage;
+
+    public void Construct(DotConfig dotConfig)
+    {
+        this.dotConfig = dotConfig;
+        _dotImage.sprite = this.dotConfig.sprite;
+    }
 }

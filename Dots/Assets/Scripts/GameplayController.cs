@@ -4,29 +4,46 @@ using UnityEngine;
 
 public class GameplayController : MonoBehaviour
 {
-    public GameplayConfig gameplayConfig;
+    [SerializeField]
+    private GameplayConfig gameplayConfig;
 
     private DotField _dotField;
-    private RandomFieldFiller<Dot> _randomFieldFiller;
-    private DotFieldViewBuilder _dotFieldViewBuilder;
+    private Vector2[,] _dotFieldCoordinates;
+    private RandomDotFieldFiller _randomDotFieldFiller;
+
     [SerializeField]
-    private CellDrawer _cellDrawer;
-
-    public void StartGame()
-    {
-        _dotField = new DotField(gameplayConfig.fieldHeight, gameplayConfig.fieldWidth);
-
-        _randomFieldFiller = new RandomFieldFiller<Dot>(_dotField, gameplayConfig.possibleDots);
-        _randomFieldFiller.FillEmptyCellsInField();
-
-        _cellDrawer.Construct(_dotField.Width);
-
-        _dotFieldViewBuilder = new DotFieldViewBuilder(_dotField, _cellDrawer);
-        _dotFieldViewBuilder.DrawField();
-    }
+    private DotFieldDrawer _dotFieldDrawer;
+    [SerializeField]
+    private InputPanel _inputPanel;
 
     public void Start()
     {
         StartGame();
+    }
+    public void StartGame()
+    {
+        // поле
+        _dotField = new DotField(gameplayConfig.fieldHeight * 2, gameplayConfig.fieldWidth);
+
+        // координаты
+        var fieldCoordinatesCalculator = 
+            new FieldCoordinatesCalculator(_dotField.Height, _dotField.Width, _dotFieldDrawer.DotSize);
+        _dotFieldCoordinates = fieldCoordinatesCalculator.getFieldCoordinates();
+
+        // создание и расстановка элементов
+        _dotFieldDrawer.Construct(_dotField, _dotFieldCoordinates);
+        _dotFieldDrawer.DrawField();
+
+        // добавление элементам конфигураций
+        _randomDotFieldFiller = new RandomDotFieldFiller(_dotField, gameplayConfig.possibleDots);
+        _randomDotFieldFiller.FillEmptyCellsInField();
+
+
+        // настройка игрового цикла
+        _inputPanel.SelectionEnded += DoTurn;
+    }
+    private void DoTurn(List<GameObject> dots)
+    {
+        Debug.Log(dots.Count);
     }
 }

@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2e0f9b28211e6044b756875dccbcbbc, type: 3}
+  m_Script: {fileID: 11500000, guid: 59236d39998a4494cb423a45fcf4930a, type: 3}
   m_Name: PinkDot
   m_EditorClassIdentifier: 
   sprite: {fileID: 21300000, guid: d8ad7aca121a5024f9f63eb13073c8c9, type: 3}

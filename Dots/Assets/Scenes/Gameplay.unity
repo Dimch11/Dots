@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 193931403}
   - component: {fileID: 193931405}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: InputPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -305,7 +305,7 @@ GameObject:
   - component: {fileID: 804775981}
   - component: {fileID: 804775980}
   m_Layer: 0
-  m_Name: CellDrawer
+  m_Name: FieldDrawer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -320,10 +320,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 804775979}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 580f62b8959972a4f80ffc3a115e9a8c, type: 3}
+  m_Script: {fileID: 11500000, guid: c6aa79b10685aa94fa05946bf898814e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CellPrefab: {fileID: 3233884171869333862, guid: 15626bd80dd979e498e5f913fd1c607d, type: 3}
+  DotPrefab: {fileID: 3233884171869333862, guid: 15626bd80dd979e498e5f913fd1c607d, type: 3}
 --- !u!4 &804775981
 Transform:
   m_ObjectHideFlags: 0
@@ -468,7 +468,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameplayConfig: {fileID: 11400000, guid: bd21d1d3b11bbbd4284e6e441252878b, type: 2}
-  _cellDrawer: {fileID: 804775980}
+  _dotFieldDrawer: {fileID: 804775980}
+  _inputPanel: {fileID: 193931405}
 --- !u!4 &996455438
 Transform:
   m_ObjectHideFlags: 0

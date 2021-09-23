@@ -8,7 +8,7 @@ public class InputPanel : MonoBehaviour, IDragHandler, IPointerDownHandler, IEnd
     public event Action<GameObject> DotSelected;
     public event Action<List<GameObject>> SelectionEnded;
 
-    private Sprite _firstSelectedDotSprite;
+    private DotConfig _firstSelectedDotConfig;
     private List<GameObject> _selectedDots = new List<GameObject>();
 
     public void OnPointerDown(PointerEventData eventData)
@@ -17,7 +17,7 @@ public class InputPanel : MonoBehaviour, IDragHandler, IPointerDownHandler, IEnd
 
         if (hit.transform != null)
         {
-            _firstSelectedDotSprite = hit.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
+            _firstSelectedDotConfig = hit.transform.GetComponent<Dot>().dotConfig;
             AddDotToSelectedDots(hit.transform.gameObject);
         }
     }
@@ -29,7 +29,7 @@ public class InputPanel : MonoBehaviour, IDragHandler, IPointerDownHandler, IEnd
         {
             var isNotDotSelected = !_selectedDots.Contains(hit.transform.gameObject);
             var doesDotColorMatchFirstSelectedDot =
-                hit.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite == _firstSelectedDotSprite;
+                hit.transform.GetComponent<Dot>().dotConfig == _firstSelectedDotConfig;
 
             if (isNotDotSelected && doesDotColorMatchFirstSelectedDot)
             {
@@ -43,6 +43,8 @@ public class InputPanel : MonoBehaviour, IDragHandler, IPointerDownHandler, IEnd
         {
             SelectionEnded?.Invoke(_selectedDots);
         }
+        _firstSelectedDotConfig = null;
+        _selectedDots.Clear();
     }
 
     private RaycastHit2D GetDotUnderPointer()

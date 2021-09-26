@@ -5,16 +5,18 @@ using UnityEngine;
 
 public class FieldGravitationBalancer<T>
 {
-    public event Action<Vector2, Vector2> ElementMoved;
-
     private readonly Field<T> _field;
+    private readonly FieldClearer<T> _fieldClearer;
+    private readonly FieldElementsMover<T> _fieldElementsMover;
 
     private int _curColumn;
     private int _curRow;
 
-    public FieldGravitationBalancer(Field<T> field)
+    public FieldGravitationBalancer(Field<T> field, FieldClearer<T> fieldClearer, FieldElementsMover<T> fieldElementsMover)
     {
         _field = field;
+        _fieldClearer = fieldClearer;
+        _fieldElementsMover = fieldElementsMover;
     }
 
     public void BalanceField()
@@ -35,30 +37,23 @@ public class FieldGravitationBalancer<T>
     }
     private void BalanceElement()
     {
-        var newPos = FindEmptyRowInColumn();
+        var newRow = FindEmptyRowInColumn();
 
-        if (newPos != _curRow)
+        if (newRow != _curRow)
         {
-            MoveCurElementToNewRow(newPos);
+            _fieldElementsMover.SwapElements((_curColumn, _curRow), (_curColumn, newRow));
         }
     }
     private int FindEmptyRowInColumn()
     {
         for (int i = _field.Height - 1; i > _curRow; i--)
         {
-            if (_field.CellIsEmpty(i, _curColumn))
+            if (_fieldClearer.CellIsEmpty(i, _curColumn))
             {
                 return i;
             }
         }
 
         return _curRow;
-    }
-    private void MoveCurElementToNewRow(int newRow)
-    {
-        _field[newRow, _curColumn] = _field[_curRow, _curColumn];
-        _field.ClearCell(_curRow, _curColumn);
-
-        ElementMoved?.Invoke(new Vector2(_curRow, _curColumn), new Vector2(newRow, _curColumn));
     }
 }

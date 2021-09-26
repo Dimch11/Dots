@@ -11,10 +11,13 @@ public class GameplayController : MonoBehaviour
     [SerializeField]
     private InputPanel _inputPanel;
 
-    private DotField _dotField;
+    private Field<Dot> _dotField;
     private Vector2[,] _dotFieldCoordinates;
+    private DotFieldClearer _fieldClearer;
     private RandomDotFieldFiller _randomDotFieldFiller;
     private SelectionHandler _selectionHandler;
+    private FieldGravitationBalancer<Dot> _fieldGravitationBalancer;
+    private FieldElementsMover<Dot> _fieldElementsMover;
 
     public void Start()
     {
@@ -23,26 +26,40 @@ public class GameplayController : MonoBehaviour
     public void StartGame()
     {
         // поле
-        _dotField = new DotField(gameplayConfig.fieldHeight * 2, gameplayConfig.fieldWidth);
+        _dotField = new Field<Dot>(gameplayConfig.fieldHeight * 2, gameplayConfig.fieldWidth);
 
         // координаты
         var fieldCoordinatesCalculator = 
             new FieldCoordinatesCalculator(_dotField.Height, _dotField.Width, _dotFieldDrawer.DotSize);
         _dotFieldCoordinates = fieldCoordinatesCalculator.getFieldCoordinates();
 
+        // очистка поля
+        _fieldClearer = new DotFieldClearer(_dotField);
+
         // создание и расстановка элементов
         _dotFieldDrawer.Construct(_dotField, _dotFieldCoordinates);
         _dotFieldDrawer.DrawField();
 
         // добавление элементам конфигураций
-        _randomDotFieldFiller = new RandomDotFieldFiller(_dotField, gameplayConfig.possibleDots);
+        _randomDotFieldFiller = new RandomDotFieldFiller(_dotField, _fieldClearer, gameplayConfig.possibleDots);
         _randomDotFieldFiller.FillEmptyCellsInField();
-
 
         // обработка ввода (выделения точек)
         _selectionHandler = new SelectionHandler(new AdjecentElementsFinder<Dot>(_dotField), _inputPanel);
+
+        // очистка выбранных точек когда выборка готова
+        _selectionHandler.SelectionEnded += _fieldClearer.ClearCells;
+
+        // swap элементов поля
+        _fieldElementsMover = new FieldElementsMover<Dot>(_dotField);
+
+        // балансировка после очистки
+        _fieldGravitationBalancer = new FieldGravitationBalancer<Dot>(_dotField, _fieldClearer, _fieldElementsMover);
+        _fieldClearer.ClearingComplete += _fieldGravitationBalancer.BalanceField;
+
+
     }
-    private void DoTurn(List<GameObject> dots)
+    private void TEST(List<Dot> dots)
     {
         Debug.Log(dots.Count);
     }

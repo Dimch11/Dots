@@ -4,10 +4,12 @@ using System.Collections.Generic;
 public abstract class FieldFiller<T>
 {
     protected Field<T> _field;
+    protected FieldClearer<T> _fieldClearer;
 
-    public FieldFiller(Field<T> field)
+    public FieldFiller(Field<T> field, FieldClearer<T> fieldClearer)
     {
         _field = field;
+        _fieldClearer = fieldClearer;
     }
 
     public void FillEmptyCellsInField()
@@ -22,7 +24,7 @@ public abstract class FieldFiller<T>
     }
     protected void FillCellIfEmpty(int height, int width)
     {
-        if (_field.CellIsEmpty(height, width))
+        if (_fieldClearer.CellIsEmpty(height, width))
         {
             FillCell(height, width);
         }

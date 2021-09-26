@@ -6,7 +6,7 @@ public class RandomDotFieldFiller : FieldFiller<Dot>
     private List<DotConfig> _possibleDotConfigs;
     private Random _rnd;
 
-    public RandomDotFieldFiller(Field<Dot> field, List<DotConfig> possibleDotConfigs) : base(field)
+    public RandomDotFieldFiller(Field<Dot> field, FieldClearer<Dot> fieldClearer, List<DotConfig> possibleDotConfigs) : base(field, fieldClearer)
     {
         _possibleDotConfigs = possibleDotConfigs;
         _rnd = new Random();

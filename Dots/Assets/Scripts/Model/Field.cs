@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-public abstract class Field<T>
+public class Field<T>
 {
     public T this[int heightPos, int widthPos]
     {
@@ -14,7 +14,17 @@ public abstract class Field<T>
             cells[heightPos, widthPos] = value;
         }
     }
-
+    public T this[(int height, int width) pos]
+    {
+        get
+        {
+            return cells[pos.height, pos.width];
+        }
+        set
+        {
+            cells[pos.height, pos.width] = value;
+        }
+    }
     public int Height { get => cells.GetLength(0); }
     public int Width { get => cells.GetLength(1); }
 
@@ -25,11 +35,12 @@ public abstract class Field<T>
         cells = new T[height, width];
     }
 
-    
-    
     public bool CellExists(int height, int width)
     {
-        if (height < cells.GetLength(0) && width < cells.GetLength(1))
+        var topBoundsIsOk = height < cells.GetLength(0) && width < cells.GetLength(1);
+        var bottomBoundsIsOk = height >= 0 && width >= 0;
+
+        if (topBoundsIsOk && bottomBoundsIsOk)
         {
             return true;
         }

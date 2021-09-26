@@ -6,15 +6,15 @@ public class GameplayController : MonoBehaviour
 {
     [SerializeField]
     private GameplayConfig gameplayConfig;
-
-    private DotField _dotField;
-    private Vector2[,] _dotFieldCoordinates;
-    private RandomDotFieldFiller _randomDotFieldFiller;
-
     [SerializeField]
     private DotFieldDrawer _dotFieldDrawer;
     [SerializeField]
     private InputPanel _inputPanel;
+
+    private DotField _dotField;
+    private Vector2[,] _dotFieldCoordinates;
+    private RandomDotFieldFiller _randomDotFieldFiller;
+    private SelectionHandler _selectionHandler;
 
     public void Start()
     {
@@ -39,8 +39,8 @@ public class GameplayController : MonoBehaviour
         _randomDotFieldFiller.FillEmptyCellsInField();
 
 
-        // настройка игрового цикла
-        _inputPanel.SelectionEnded += DoTurn;
+        // обработка ввода (выделения точек)
+        _selectionHandler = new SelectionHandler(new AdjecentElementsFinder<Dot>(_dotField), _inputPanel);
     }
     private void DoTurn(List<GameObject> dots)
     {

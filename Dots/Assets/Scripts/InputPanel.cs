@@ -5,55 +5,37 @@ using UnityEngine.EventSystems;
 
 public class InputPanel : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDragHandler
 {
-    public event Action<GameObject> DotSelected;
-    public event Action<List<GameObject>> SelectionEnded;
-
-    private DotConfig _firstSelectedDotConfig;
-    private List<GameObject> _selectedDots = new List<GameObject>();
+    public event Action BeforeSelectionStarted;
+    public event Action<Dot> TryingSelectDot;
+    public event Action SelectionEnded;
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        var hit = GetDotUnderPointer();
+        BeforeSelectionStarted?.Invoke();
 
-        if (hit.transform != null)
-        {
-            _firstSelectedDotConfig = hit.transform.GetComponent<Dot>().dotConfig;
-            AddDotToSelectedDots(hit.transform.gameObject);
-        }
+        InvokeIfTryingSelectDot();
     }
     public void OnDrag(PointerEventData eventData)
     {
-        var hit = GetDotUnderPointer();
-
-        if (hit.transform != null)
-        {
-            var isNotDotSelected = !_selectedDots.Contains(hit.transform.gameObject);
-            var doesDotColorMatchFirstSelectedDot =
-                hit.transform.GetComponent<Dot>().dotConfig == _firstSelectedDotConfig;
-
-            if (isNotDotSelected && doesDotColorMatchFirstSelectedDot)
-            {
-                AddDotToSelectedDots(hit.transform.gameObject);
-            }
-        }
+        InvokeIfTryingSelectDot();
     }
     public void OnEndDrag(PointerEventData eventData)
     {
-        if (_selectedDots.Count > 0)
-        {
-            SelectionEnded?.Invoke(_selectedDots);
-        }
-        _firstSelectedDotConfig = null;
-        _selectedDots.Clear();
+        SelectionEnded?.Invoke();
     }
 
-    private RaycastHit2D GetDotUnderPointer()
+    private void InvokeIfTryingSelectDot()
     {
-        return Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+        var dot = GetDotUnderPointer();
+
+        if (dot != null)
+        {
+            TryingSelectDot?.Invoke(dot);
+        }
     }
-    private void AddDotToSelectedDots(GameObject dot)
+    private Dot GetDotUnderPointer()
     {
-        _selectedDots.Add(dot);
-        DotSelected?.Invoke(dot);
+        return Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero)
+            .transform?.GetComponent<Dot>();
     }
 }

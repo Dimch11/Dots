@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Dot : MonoBehaviour
 {
-    public DotConfig dotConfig;
+    public DotConfig config;
     public SpriteRenderer _dotImage;
 
     public void Construct(DotConfig dotConfig)
     {
-        this.dotConfig = dotConfig;
-        _dotImage.sprite = this.dotConfig.sprite;
+        this.config = dotConfig;
+        _dotImage.sprite = this.config.sprite;
     }
 }

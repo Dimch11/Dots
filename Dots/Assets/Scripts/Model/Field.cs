@@ -25,23 +25,32 @@ public abstract class Field<T>
         cells = new T[height, width];
     }
 
-    public void Clear()
+    
+    
+    public bool CellExists(int height, int width)
+    {
+        if (height < cells.GetLength(0) && width < cells.GetLength(1))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public (int height, int width) GetIndicesOfElement(T element)
     {
         for (int i = 0; i < cells.GetLength(0); i++)
         {
             for (int j = 0; j < cells.GetLength(1); j++)
             {
-                ClearCell(i, j);
+                if (EqualityComparer<T>.Default.Equals(cells[i, j], element))
+                {
+                    return (i, j);
+                }
             }
         }
+
+        throw new ArgumentException();
     }
-    public void ClearCells(List<(int height, int width)> cells)
-    {
-        foreach (var cell in cells)
-        {
-            ClearCell(cell.height, cell.width);
-        }
-    }
-    public abstract void ClearCell(int height, int width);
-    public abstract bool CellIsEmpty(int height, int width);
 }

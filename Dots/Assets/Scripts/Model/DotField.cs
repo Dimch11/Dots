@@ -11,7 +11,7 @@ public class DotField : Field<Dot>
 
     public override bool CellIsEmpty(int height, int width)
     {
-        return cells[height, width].GetComponent<Dot>().dotConfig == null;
+        return cells[height, width].GetComponent<Dot>().config == null;
     }
     public override void ClearCell(int height, int width)
     {

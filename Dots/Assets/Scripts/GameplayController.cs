@@ -26,63 +26,100 @@ public class GameplayController : MonoBehaviour
     }
     public void StartGame()
     {
-        // поле
-        _dotField = new Field<Dot>(gameplayConfig.fieldHeight * 2, gameplayConfig.fieldWidth);
+        Initializate();
+        SetEvents();
 
-        // координаты
-        var fieldCoordinatesCalculator = 
-            new FieldCoordinatesCalculator(_dotField.Height, _dotField.Width, _dotFieldDrawer.DotSize);
-        _dotFieldCoordinates = fieldCoordinatesCalculator.getFieldCoordinates();
-
-        // очистка поля
-        _fieldClearer = new DotFieldClearer(_dotField);
-
-        // создание и расстановка элементов
-        _dotFieldDrawer.Construct(_dotField, _dotFieldCoordinates);
         _dotFieldDrawer.DrawField();
-
-        // добавление элементам конфигураций
-        _randomDotFieldFiller = new RandomDotFieldFiller(_dotField, _fieldClearer, gameplayConfig.possibleDots);
         _randomDotFieldFiller.FillEmptyCellsInField();
+    }
 
-        // обработка ввода (выделения точек)
-        _selectionHandler = new SelectionHandler(new AdjecentElementsFinder<Dot>(_dotField));
+    private void Initializate()
+    {
+        InitDotField();
+        InitDotFieldCoordinates();
+        InitFieldClearer();
+        InitDotFieldDrawer();
+        InitRandomDotFiller();
+        InitSelectionHandler();
+        InitFieldElementsMover();
+        InitFieldGravitationBalancer();
+        InitViewAnimationController();
+    }
+    private void SetEvents()
+    {
+        BindSelectionHandlerToInputPanel();
+        ClearCellsWhenSelectionEnded();
+        BalanceFieldAfterCleaning();
+        FillFieldAfterBalancing();
+        BindAnimationToMover();
+    }
+
+    private void BindSelectionHandlerToInputPanel()
+    {
         _inputPanel.BeforeSelectionStarted += _selectionHandler.StartSelection;
         _inputPanel.TryingSelectDot += _selectionHandler.TrySelectDot;
         _inputPanel.SelectionEnded += _selectionHandler.EndSelection;
-
-        // очистка выбранных точек когда выборка готова
-        _selectionHandler.SelectionEnded += _fieldClearer.ClearCells;
-
-        // swap элементов поля
-        _fieldElementsMover = new FieldElementsMover<Dot>(_dotField);
-
-        // балансировка после очистки
-        _fieldGravitationBalancer = new FieldGravitationBalancer<Dot>(_dotField, _fieldClearer, _fieldElementsMover);
-        _fieldClearer.ClearingComplete += _fieldGravitationBalancer.BalanceField;
-
-        // заполнение поля после балансировки
-        _fieldGravitationBalancer.FieldBalanced += () => StartCoroutine(FillAfterTime());
-
-
-        // контроль анимаций
-        _viewAnimationController = new ViewAnimationController<Dot>();
-        _viewAnimationController.Construct(_dotField, _dotFieldCoordinates);
-        _fieldElementsMover.BeforeElementSwap += _viewAnimationController.SwapElements;
-
-
-        
-
-
-        _selectionHandler.SelectionEnded += TEST;
     }
-    private void TEST(List<Dot> dots)
+    private void ClearCellsWhenSelectionEnded()
     {
-        Debug.Log(dots.Count);
+        _selectionHandler.SelectionEnded += _fieldClearer.ClearCells;
+    }
+    private void BalanceFieldAfterCleaning()
+    {
+        _fieldClearer.ClearingComplete += _fieldGravitationBalancer.BalanceField;
+    }
+    private void FillFieldAfterBalancing()
+    {
+        _fieldGravitationBalancer.FieldBalanced += () => StartCoroutine(FillAfterTime());
     }
     private IEnumerator FillAfterTime()
     {
         yield return new WaitForSeconds(0.8f);
         _randomDotFieldFiller.FillEmptyCellsInField();
+    }
+    private void BindAnimationToMover()
+    {
+        _fieldElementsMover.BeforeElementSwap += _viewAnimationController.SwapElements;
+    }
+
+    
+    private void InitDotField()
+    {
+        _dotField = new Field<Dot>(gameplayConfig.fieldHeight * 2, gameplayConfig.fieldWidth);
+    }
+    private void InitDotFieldCoordinates()
+    {
+        var fieldCoordinatesCalculator =
+                    new FieldCoordinatesCalculator(_dotField.Height, _dotField.Width, _dotFieldDrawer.DotSize);
+        _dotFieldCoordinates = fieldCoordinatesCalculator.getFieldCoordinates();
+    }
+    private void InitFieldClearer()
+    {
+        _fieldClearer = new DotFieldClearer(_dotField);
+    }
+    private void InitDotFieldDrawer()
+    {
+        _dotFieldDrawer.Construct(_dotField, _dotFieldCoordinates);
+    }
+    private void InitRandomDotFiller()
+    {
+        _randomDotFieldFiller = new RandomDotFieldFiller(_dotField, _fieldClearer, gameplayConfig.possibleDots);
+    }
+    private void InitSelectionHandler()
+    {
+        _selectionHandler = new SelectionHandler(new AdjecentElementsFinder<Dot>(_dotField));
+    }
+    private void InitFieldElementsMover()
+    {
+        _fieldElementsMover = new FieldElementsMover<Dot>(_dotField);
+    }
+    private void InitFieldGravitationBalancer()
+    {
+        _fieldGravitationBalancer = new FieldGravitationBalancer<Dot>(_dotField, _fieldClearer, _fieldElementsMover);
+    }
+    private void InitViewAnimationController()
+    {
+        _viewAnimationController = new ViewAnimationController<Dot>();
+        _viewAnimationController.Construct(_dotField, _dotFieldCoordinates);
     }
 }

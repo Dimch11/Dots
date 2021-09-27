@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class FieldGravitationBalancer<T>
 {
+    public event Action FieldBalanced;
+
     private readonly Field<T> _field;
     private readonly FieldClearer<T> _fieldClearer;
     private readonly FieldElementsMover<T> _fieldElementsMover;
@@ -26,6 +28,7 @@ public class FieldGravitationBalancer<T>
             _curColumn = i;
             BalanceColumn();
         }
+        FieldBalanced?.Invoke();
     }
     private void BalanceColumn()
     {

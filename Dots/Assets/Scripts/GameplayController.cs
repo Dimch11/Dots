@@ -61,6 +61,9 @@ public class GameplayController : MonoBehaviour
         _fieldGravitationBalancer = new FieldGravitationBalancer<Dot>(_dotField, _fieldClearer, _fieldElementsMover);
         _fieldClearer.ClearingComplete += _fieldGravitationBalancer.BalanceField;
 
+        // заполнение поля после балансировки
+        _fieldGravitationBalancer.FieldBalanced += () => StartCoroutine(FillAfterTime());
+
 
         // контроль анимаций
         _viewAnimationController = new ViewAnimationController<Dot>();
@@ -68,10 +71,18 @@ public class GameplayController : MonoBehaviour
         _fieldElementsMover.BeforeElementSwap += _viewAnimationController.SwapElements;
 
 
+        
+
+
         _selectionHandler.SelectionEnded += TEST;
     }
     private void TEST(List<Dot> dots)
     {
         Debug.Log(dots.Count);
+    }
+    private IEnumerator FillAfterTime()
+    {
+        yield return new WaitForSeconds(0.8f);
+        _randomDotFieldFiller.FillEmptyCellsInField();
     }
 }

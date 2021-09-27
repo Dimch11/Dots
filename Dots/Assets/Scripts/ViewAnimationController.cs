@@ -15,7 +15,7 @@ public class ViewAnimationController<T> where T : MonoBehaviour
     }
     public void SwapElements((int h, int w) elem1, (int h, int w) elem2)
     {
-        _field[elem1].transform.DOLocalMove(_coordinates[elem2.h, elem2.w], 1);
-        _field[elem2].transform.DOLocalMove(_coordinates[elem1.h, elem1.w], 1);
+        _field[elem1].transform.DOLocalMove(_coordinates[elem2.h, elem2.w], 1).SetEase(Ease.OutBounce);
+        _field[elem2].transform.DOLocalMove(_coordinates[elem1.h, elem1.w], 1).SetEase(Ease.OutBounce);
     }
 }

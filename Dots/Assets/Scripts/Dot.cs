@@ -12,4 +12,9 @@ public class Dot : MonoBehaviour
         this.config = dotConfig;
         _dotImage.sprite = this.config.sprite;
     }
+    public void ClearConfig()
+    {
+        config = null;
+        _dotImage.sprite = null;
+    }
 }

@@ -12,12 +12,9 @@ public class SelectionHandler
 
     private Dot _curDot;
 
-    public SelectionHandler(AdjecentElementsFinder<Dot> adjecentElementsFinder, InputPanel inputPanel)
+    public SelectionHandler(AdjecentElementsFinder<Dot> adjecentElementsFinder)
     {
         _adjecentElementsFinder = adjecentElementsFinder;
-        inputPanel.BeforeSelectionStarted += StartSelection;
-        inputPanel.TryingSelectDot += TrySelectDot;
-        inputPanel.SelectionEnded += EndSelection;
     }
 
     public void StartSelection()

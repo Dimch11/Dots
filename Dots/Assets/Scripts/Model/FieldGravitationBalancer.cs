@@ -41,7 +41,7 @@ public class FieldGravitationBalancer<T>
 
         if (newRow != _curRow)
         {
-            _fieldElementsMover.SwapElements((_curColumn, _curRow), (_curColumn, newRow));
+            _fieldElementsMover.SwapElements((_curRow, _curColumn), (newRow, _curColumn));
         }
     }
     private int FindEmptyRowInColumn()

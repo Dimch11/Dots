@@ -18,6 +18,7 @@ public class GameplayController : MonoBehaviour
     private SelectionHandler _selectionHandler;
     private FieldGravitationBalancer<Dot> _fieldGravitationBalancer;
     private FieldElementsMover<Dot> _fieldElementsMover;
+    private ViewAnimationController<Dot> _viewAnimationController;
 
     public void Start()
     {
@@ -45,7 +46,10 @@ public class GameplayController : MonoBehaviour
         _randomDotFieldFiller.FillEmptyCellsInField();
 
         // обработка ввода (выделения точек)
-        _selectionHandler = new SelectionHandler(new AdjecentElementsFinder<Dot>(_dotField), _inputPanel);
+        _selectionHandler = new SelectionHandler(new AdjecentElementsFinder<Dot>(_dotField));
+        _inputPanel.BeforeSelectionStarted += _selectionHandler.StartSelection;
+        _inputPanel.TryingSelectDot += _selectionHandler.TrySelectDot;
+        _inputPanel.SelectionEnded += _selectionHandler.EndSelection;
 
         // очистка выбранных точек когда выборка готова
         _selectionHandler.SelectionEnded += _fieldClearer.ClearCells;
@@ -58,6 +62,13 @@ public class GameplayController : MonoBehaviour
         _fieldClearer.ClearingComplete += _fieldGravitationBalancer.BalanceField;
 
 
+        // контроль анимаций
+        _viewAnimationController = new ViewAnimationController<Dot>();
+        _viewAnimationController.Construct(_dotField, _dotFieldCoordinates);
+        _fieldElementsMover.BeforeElementSwap += _viewAnimationController.SwapElements;
+
+
+        _selectionHandler.SelectionEnded += TEST;
     }
     private void TEST(List<Dot> dots)
     {

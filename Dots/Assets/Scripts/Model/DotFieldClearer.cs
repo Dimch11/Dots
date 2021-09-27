@@ -14,7 +14,7 @@ public class DotFieldClearer : FieldClearer<Dot>
 
     public override void ClearCell(int height, int width)
     {
-        field[height, width].config = null;
+        field[height, width].ClearConfig();
         CellCleared?.Invoke(height, width);
     }
     public override bool CellIsEmpty(int height, int width)

@@ -1,6 +1,8 @@
 # Dots (игра типа 3 в ряд, но нужно соединять точки)
 Тестовое задание, которое я делал с 21.09.2021 по 27.09.2021
 
+![Gameplay](/Readme images/Dots.png)
+
 ## Тестовое задание
 Тестовое задание:
 Сделать аналог игры https://play.google.com/store/apps/details?id=com.nerdyoctopus.gamedots
